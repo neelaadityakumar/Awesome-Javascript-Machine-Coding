@@ -1,70 +1,81 @@
-(() => {
-  const config = {
-    green: { backgroundColor: "green", duration: 3000, next: "yellow" },
-    yellow: { backgroundColor: "yellow", duration: 500, next: "red" },
-    red: { backgroundColor: "red", duration: 4000, next: "green" },
-  };
+class TrafficLight {
+  constructor(rootEl, { initialColor, config, layout = "horizontal" }) {
+    this.rootEl = rootEl;
+    this.config = config;
+    this.currentColor = initialColor;
+    this.layout = layout;
+    this.timer = null;
 
-  function createLight(color) {
+    this.containerEl = document.createElement("div");
+    this.containerEl.classList.add("traffic-light-container");
+    this.containerEl.setAttribute("aria-live", "polite");
+
+    if (this.layout === "vertical") {
+      this.containerEl.classList.add("traffic-light-container--vertical");
+    }
+
+    this.rootEl.appendChild(this.containerEl);
+    this.runTrafficLight();
+
+    window.addEventListener("beforeunload", () => this.clearTimer());
+  }
+
+  createLight(color) {
     const lightEl = document.createElement("div");
-    lightEl.classList.add("traffic-light");
+    lightEl.classList.add("light");
     lightEl.setAttribute("aria-hidden", true);
     if (color) lightEl.style.backgroundColor = color;
     return lightEl;
   }
 
-  function createTrafficLight(rootEl, { initialColor, config, layout }) {
-    let currentColor = initialColor;
-    const containerEl = document.createElement("div");
-    containerEl.classList.add("traffic-light-container");
-    containerEl.setAttribute("aria-live", "polite");
-    if (layout === "vertical")
-      containerEl.classList.add("traffic-light-container--vertical");
+  updateLight() {
+    this.containerEl.innerHTML = "";
+    this.containerEl.setAttribute(
+      "aria-label",
+      `Current light: ${this.currentColor}`
+    );
 
-    let timer = null;
-
-    function updateLight() {
-      containerEl.innerHTML = "";
-      containerEl.setAttribute("aria-label", `Current light: ${currentColor}`);
-      Object.keys(config).forEach((color) => {
-        containerEl.append(
-          createLight(
-            color === currentColor ? config[color].backgroundColor : undefined
-          )
-        );
-      });
-    }
-
-    function transitionLight() {
-      const { duration, next } = config[currentColor];
-      timer = setTimeout(() => {
-        currentColor = next;
-        runTrafficLight();
-      }, duration);
-    }
-
-    function runTrafficLight() {
-      updateLight();
-      transitionLight();
-    }
-    // The beforeunload event is fired before the tab/window is closed.
-    // Clear the timer when the tab/window is about to be closed.
-
-    window.addEventListener("beforeunload", () => clearTimeout(timer));
-
-    rootEl.append(containerEl);
-    runTrafficLight();
+    Object.keys(this.config).forEach((color) => {
+      this.containerEl.append(
+        this.createLight(
+          color === this.currentColor
+            ? this.config[color].backgroundColor
+            : undefined
+        )
+      );
+    });
   }
 
-  createTrafficLight(document.getElementById("traffic-light"), {
-    initialColor: "red",
-    config,
-    layout: "horizontal",
-  });
+  transitionLight() {
+    const { duration, next } = this.config[this.currentColor];
+    this.timer = setTimeout(() => {
+      this.currentColor = next;
+      this.runTrafficLight();
+    }, duration);
+  }
 
-  createTrafficLight(document.getElementById("traffic-light-2"), {
+  runTrafficLight() {
+    this.updateLight();
+    this.transitionLight();
+  }
+
+  clearTimer() {
+    clearTimeout(this.timer);
+  }
+}
+
+// Traffic Light Configurations
+const config = {
+  green: { backgroundColor: "green", duration: 3000, next: "yellow" },
+  yellow: { backgroundColor: "yellow", duration: 500, next: "red" },
+  red: { backgroundColor: "red", duration: 4000, next: "green" },
+};
+
+// Attach to each traffic light wrapper
+document.querySelectorAll(".traffic-light").forEach((wrapper, index) => {
+  new TrafficLight(wrapper, {
     initialColor: "red",
     config,
-    layout: "vertical",
+    layout: index === 0 ? "vertical" : "horizontal", // First one vertical, second horizontal
   });
-})();
+});
