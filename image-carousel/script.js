@@ -1,17 +1,42 @@
 class Carousel {
-  constructor(carouselElement, options = {}) {
-    this.carousel = carouselElement;
+  constructor(container, options) {
+    this.container = container;
+    this.autoPlay = options.autoPlay || false;
+    this.intervalTime = options.intervalTime || 3000;
+    this.images = options.images || [];
+    this.currentIndex = 0;
+    this.timer = null;
+    this.createCarousel();
+
     this.carouselInner = this.carousel.querySelector(".carousel-inner");
     this.items = this.carousel.querySelectorAll(".carousel-item");
     this.prevBtn = this.carousel.querySelector(".carousel-control.left");
     this.nextBtn = this.carousel.querySelector(".carousel-control.right");
-    this.currentIndex = 0;
+
     this.totalItems = this.items.length;
-    this.autoPlay = options.autoPlay || false;
-    this.intervalTime = options.intervalTime || 3000;
-    this.timer = null;
 
     this.init();
+  }
+
+  createCarousel() {
+    this.carousel = document.createElement("div");
+    this.carousel.classList.add("carousel");
+    this.carousel.innerHTML = `
+      <div class="carousel-inner">
+        ${this.images
+          .map(
+            (img, index) =>
+              `<div class="carousel-item ${index === 0 ? "active" : ""}">
+                <img src="${img.src}" alt="${img.alt}" />
+              </div>`
+          )
+          .join("")}
+      </div>
+      <button class="carousel-control left">&lt;</button>
+      <button class="carousel-control right">&gt;</button>
+    `;
+
+    this.container.appendChild(this.carousel);
   }
 
   init() {
@@ -31,7 +56,6 @@ class Carousel {
   prevSlide() {
     this.currentIndex =
       (this.currentIndex - 1 + this.totalItems) % this.totalItems;
-
     this.updateCarousel();
   }
 
@@ -49,9 +73,29 @@ class Carousel {
   }
 }
 
-document.querySelectorAll(".carousel").forEach((carouselEl, index) => {
-  new Carousel(carouselEl, {
-    autoPlay: index === 0, // First carousel autoplay true, second false
-    intervalTime: index === 0 ? 5000 : 4000,
-  });
+const carouselContainer = document.querySelector(".container");
+
+const carousels = [
+  {
+    autoPlay: true,
+    intervalTime: 5000,
+    images: [
+      { src: "https://picsum.photos/536/354", alt: "Image 1" },
+      { src: "https://picsum.photos/536/352", alt: "Image 2" },
+      { src: "https://picsum.photos/536/353", alt: "Image 3" },
+    ],
+  },
+  {
+    autoPlay: true,
+    intervalTime: 5000,
+    images: [
+      { src: "https://picsum.photos/536/354", alt: "Image 1" },
+      { src: "https://picsum.photos/536/352", alt: "Image 2" },
+      { src: "https://picsum.photos/536/353", alt: "Image 3" },
+    ],
+  },
+];
+
+carousels.forEach((carouselData) => {
+  new Carousel(carouselContainer, carouselData);
 });
