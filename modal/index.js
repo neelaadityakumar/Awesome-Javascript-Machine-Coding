@@ -1,21 +1,50 @@
-let btn = document.getElementById("btn");
-let modal = document.getElementById("modal");
-let overlay = document.getElementById("overlay");
-let modalContainer = document.querySelector(".modal-container");
+class Modal {
+  constructor(triggerSelector, modalSelector, options = {}) {
+    this.triggerBtns = document.querySelectorAll(triggerSelector);
+    this.modal = document.querySelector(modalSelector);
+    this.overlay = this.modal.querySelector(".overlay");
+    this.closeBtn = this.modal.querySelector(".close");
+    this.modalContainer = this.modal.querySelector(".modal-container");
 
-// Open Modal
-btn.addEventListener("click", function (e) {
-  modal.style.display = "block";
-});
+    this.options = {
+      closeOnOverlayClick: true,
+      ...options,
+    };
 
-// Close modal when clicking the close button
-document.getElementById("close").addEventListener("click", function (e) {
-  modal.style.display = "none";
-});
-
-// Close modal when clicking **outside modal content**
-overlay.addEventListener("click", function (e) {
-  if (!modalContainer.contains(e.target)) {
-    modal.style.display = "none";
+    this.init();
   }
+
+  init() {
+    // Open modal event
+    this.triggerBtns.forEach((btn) =>
+      btn.addEventListener("click", () => this.openModal())
+    );
+
+    // Close modal event
+    this.closeBtn.addEventListener("click", () => this.closeModal());
+
+    // Close when clicking outside (if enabled)
+    if (this.options.closeOnOverlayClick) {
+      this.overlay.addEventListener("click", (e) => this.handleOverlayClick(e));
+    }
+  }
+
+  openModal() {
+    this.modal.style.display = "block";
+  }
+
+  closeModal() {
+    this.modal.style.display = "none";
+  }
+
+  handleOverlayClick(e) {
+    if (!this.modalContainer.contains(e.target)) {
+      this.closeModal();
+    }
+  }
+}
+
+document.querySelectorAll("[data-modal-target]").forEach((btn) => {
+  const modalId = btn.getAttribute("data-modal-target");
+  new Modal(`[data-modal-target="${modalId}"]`, `#${modalId}`);
 });

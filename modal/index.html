@@ -3,30 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Modal Example</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="">
-      <h1>Modal Example</h1>
-      <button id="btn" class="btn">Open Modal</button>
-    </div>
+    <h1>Modal Example</h1>
+    <button data-modal-target="modal1" class="btn">Open Modal 1</button>
+    <button data-modal-target="modal2" class="btn">Open Modal 2</button>
 
-    <div id="modal" class="modal">
-      <div id="overlay" class="overlay"></div>
+    <!-- Modal 1 -->
+    <div id="modal1" class="modal">
+      <div class="overlay"></div>
       <div class="modal-container">
         <div class="text-details">
-          <span>Modal</span>
-          <span id="close" class="close">&#x2716;</span>
+          <span>Modal 1</span>
+          <span class="close">&#x2716;</span>
           <hr />
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </p>
+          <p>This is the first modal.</p>
         </div>
       </div>
     </div>
+
+    <!-- Modal 2 -->
+    <div id="modal2" class="modal">
+      <div class="overlay"></div>
+      <div class="modal-container">
+        <div class="text-details">
+          <span>Modal 2</span>
+          <span class="close">&#x2716;</span>
+          <hr />
+          <p>This is the second modal.</p>
+        </div>
+      </div>
+    </div>
+
     <script src="index.js"></script>
   </body>
 </html>
