@@ -26,27 +26,29 @@ function clickHandler(e) {
 function onStop() {
   isInProgress = false;
   stopProgress();
-  startButton.disabled = false;
-  stopButton.disabled = true;
 }
 
 function onStart() {
   isInProgress = true;
-  startProgress();
   startButton.disabled = true;
   stopButton.disabled = false;
+  startProgress();
 }
 
 function startProgress() {
-  let progressPercent = 0.1 + getProgressWidth();
+  let progressPercent = 1 + getProgressWidth();
 
-  if (progressPercent <= 100) {
+  if (progressPercent < 100) {
     setProgressWidth(progressPercent);
     reqAniFrameId = requestAnimationFrame(startProgress);
+  } else {
+    setTimeout(stopProgress, 100);
   }
 }
 
 function stopProgress() {
+  startButton.disabled = false;
+  stopButton.disabled = true;
   cancelAnimationFrame(reqAniFrameId);
 }
 
