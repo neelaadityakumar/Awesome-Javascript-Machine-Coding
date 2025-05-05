@@ -1,16 +1,10 @@
-.btn {
-  background-color: #286090;
-  border: 0px;
-  height: 30px;
-  color: white;
-  border-radius: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  cursor: pointer;
-}
-
 .modal {
   display: none;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-container {
@@ -39,11 +33,13 @@
   color: red;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+.btn {
+  background-color: #286090;
+  border: 0px;
+  height: 30px;
+  color: white;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
 }
