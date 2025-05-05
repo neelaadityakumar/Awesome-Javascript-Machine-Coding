@@ -1,8 +1,8 @@
-let commentContainer = document.getElementById("comment-container");
+const container = document.querySelector(".container");
 
 function createInputBox() {
   let div = document.createElement("div");
-  div.setAttribute("class", "comment-details");
+  div.classList.add("comment-details");
 
   div.innerHTML += `
     <input type="text" placeholder="add text here" class="input" />
@@ -13,7 +13,7 @@ function createInputBox() {
 
 function addReply(text) {
   let div = document.createElement("div");
-  div.setAttribute("class", "all-comment");
+  div.classList.add("comment-container");
 
   div.innerHTML += `
     <div class="card">
@@ -26,10 +26,10 @@ function addReply(text) {
   return div;
 }
 
-commentContainer.addEventListener("click", function (e) {
+container.addEventListener("click", function (e) {
   let replyClicked = e.target.classList.contains("reply");
   let submitClicked = e.target.classList.contains("submit");
-  let closestCard = e.target.closest(".all-comment");
+  let closestCard = e.target.closest(".comment-container");
 
   if (replyClicked) {
     closestCard.appendChild(createInputBox());
