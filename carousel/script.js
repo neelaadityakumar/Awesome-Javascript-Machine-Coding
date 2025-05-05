@@ -25,8 +25,8 @@ class Carousel {
       <div class="carousel-inner">
         ${this.images
           .map(
-            (img, index) =>
-              `<div class="carousel-item ${index === 0 ? "active" : ""}">
+            (img) =>
+              `<div class="carousel-item">
                 <img src="${img.src}" alt="${img.alt}" />
               </div>`
           )
@@ -47,10 +47,9 @@ class Carousel {
   }
 
   updateCarousel() {
-    const width = this.carouselInner.clientWidth;
     this.carouselInner.style.transform = `translateX(-${
-      this.currentIndex * width
-    }px)`;
+      this.currentIndex * 100
+    }%)`;
   }
 
   prevSlide() {
