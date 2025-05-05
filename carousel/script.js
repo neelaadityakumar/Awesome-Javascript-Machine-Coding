@@ -2,14 +2,10 @@ class Carousel {
   constructor(container, options) {
     this.container = container;
     this.images = options.images || [];
+    this.totalItems = this.images.length;
     this.currentIndex = 0;
     this.createCarousel();
-    this.carouselInner = this.carousel.querySelector(".carousel-inner");
-    this.items = this.carousel.querySelectorAll(".carousel-item");
-    this.prevBtn = this.carousel.querySelector(".carousel-control.left");
-    this.nextBtn = this.carousel.querySelector(".carousel-control.right");
-    this.totalItems = this.items.length;
-    this.init();
+    this.bindEvents();
   }
 
   createCarousel() {
@@ -33,10 +29,15 @@ class Carousel {
     this.container.appendChild(this.carousel);
   }
 
-  init() {
-    this.prevBtn.addEventListener("click", () => this.prevSlide());
-    this.nextBtn.addEventListener("click", () => this.nextSlide());
-    window.addEventListener("resize", () => this.updateCarousel());
+  bindEvents() {
+    this.carouselInner = this.carousel.querySelector(".carousel-inner");
+    this.items = this.carousel.querySelectorAll(".carousel-item");
+    this.prevBtn = this.carousel
+      .querySelector(".carousel-control.left")
+      .addEventListener("click", () => this.prevSlide());
+    this.nextBtn = this.carousel
+      .querySelector(".carousel-control.right")
+      .addEventListener("click", () => this.nextSlide());
   }
 
   updateCarousel() {
